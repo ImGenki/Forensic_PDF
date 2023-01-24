@@ -4,6 +4,7 @@ import sys
 from pysafebrowsing import SafeBrowsing
 import psutil
 import time
+import oletools.olevba as olevba
 
 def analyze_link():
 	print("**************ANALYSE DES LIENS**********************")
@@ -25,7 +26,7 @@ def analyze_link():
         		if "/A" in link_obj:
             			link_url = link_obj["/A"].get("/URI", None)
             			if link_url:
-                			# Vérifier si le lien est malveillant en utilisant Google Safe Browsing
+                			#Verifier si le lien est malveillant en utilisant Google Safe Browsing
                 			try:
                 	
                 				s = SafeBrowsing(KEY)
@@ -81,9 +82,25 @@ def check_for_javascript():
 
     # Vérifier si le fichier contient des actions JavaScript
     if '/JS' in pdf_reader.trailer["/Root"]:
+        print("Le fichier {file_name} contient du JScript")
+    else:
+        print("Le fichier {file_name} ne contient pas de JScript")
+    if '/JavaScript' in pdf_reader.trailer["/Root"]:
         print("Le fichier {file_name} contient du JavaScript")
     else:
         print("Le fichier {file_name} ne contient pas de JavaScript")
+    if '/Action' in pdf_reader.trailer["/Root"]:
+        print("Le fichier {file_name} contient du balise action")
+    else:
+        print("Le fichier {file_name} ne contient Action")
+    if '/AA' in pdf_reader.trailer["/Root"]:
+        print("Le fichier {file_name} contient AA")
+    else:
+        print("Le fichier {file_name} ne contient pas AA")
+    if '/OpenAction' in pdf_reader.trailer["/Root"]:
+        print("Le fichier {file_name} contient OpenAction")
+    else:
+        print("Le fichier {file_name} ne contient pas OpenAction")
 
     # Fermer le fichier PDF
     pdf_file.close()
@@ -93,29 +110,41 @@ def analyze_embedded_objects():
     # Ouvrir le fichier PDF
     pdf_file = open(sys.argv[1], "rb")
     pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-
-    # Parcourir chaque page du PDF
-    for page_num in range(pdf_reader.numPages):
-        page = pdf_reader.getPage(page_num)
-
-        # Extraire les objets embarqués de la page
-        embedded_objects = page.getObjects()
-
-        # Analyser chaque objet embarqué
-        for obj in embedded_objects:
-            # Afficher les informations de l'objet
-            print("Type de l'objet : {"+obj['/Type']+"}")
-            print("Sous-type de l'objet : {"+obj['/Subtype']+"}")
-            print("Taille de l'objet : {"+obj.get('/Length', None)+"}")
-
-            # Vérifier si l'objet est une image
-            if obj['/Subtype'] == '/Image':
-                print("Dimensions de l'image : {"+obj['/Width']+"} x {"+obj['/Height']+"")
+    print(pdf_reader.resolvedObjects)
     pdf_file.close()
+    
 
-process_comp()
-analyze_link()
-analyze_embedded_objects()
-check_for_javascript()
+def detect_vba():
+       	# Ouvrir le fichier PDF avec PyPDF
+        pdf_file = open(sys.argv[1], "rb")
+        pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+        # Extraire le cotenu du PDF
+        content = sys.argv[1]+" "
+        for page in range(pdf_reader.getNumPages()):
+            content += pdf_reader.getPage(page).extractText()
+            f=open("newtext.txt","w")
+            f.write(content)
+        pdf_file.close()
+        
+        # Utiliser oletools pour analyser le contenu et détecter les macros VBA
+        vba_parser = olevba.VBA_Parser("newtext.txt")
+        if vba_parser.detect_vba_macros():
+            print("Macros VBA détectées dans le fichier " + sys.argv[1])
+            for (subfilename, stream_path, vba_filename, vba_code) in vba_parser.extract_macros():
+                if 'VBA' in vba_code:
+                	print(" - " + vba_filename)
+                else:
+                	print("Aucune macro VBA n'a été détectée dans le fichier " + sys.argv[1])
+
+        f.close()
+        
+if sys.argv[1]=='':
+	print ("entrer un nom de PDF pour l'analyser")
+else:
+	process_comp()
+	analyze_link()
+	analyze_embedded_objects()
+	check_for_javascript()
+	detect_vba()
 
 
