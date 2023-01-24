@@ -1,0 +1,23 @@
+body{
+    background-color: wheat;
+    text-align: center;
+}
+h1{
+    display: inline;
+    color: hotpink;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 120;
+}
+h2{
+    display: inline;
+    color: chartreuse;
+    font-family: Rubik;
+    font-size: 120;
+}
+#conteneur{
+    background-color: white;
+    text-align: center;
+    height: 70%;
+    width: 100.5%;
+
+}
