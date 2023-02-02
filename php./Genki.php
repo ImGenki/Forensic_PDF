@@ -10,13 +10,13 @@
     </div>
     <br>
     <br>
-    <div id="drop-area">
-     <form action="upload.php" method="post" enctype="multipart/form-data">
-     <input type="file" name="file" id="file" class="inputfile" />
-     <label for="file">Glissez un fichier ici ou cliquez pour sélectionner un fichier</label>
-     <input type="submit">
-     </form>
-    </div>
+  
+
+    <form action="/file-upload" class="dropzone" id="my-awesome-dropzone" enctype="multipart/form-data"></form>
+    <br>
+    <input type="submit">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/min/dropzone.min.js"></script>
 
 <script>
   var dropArea = document.getElementById("drop-area");
@@ -49,16 +49,30 @@
 
     var files = e.dataTransfer.files;
     var file = files[0];
-    console.log(file);
+    //console.log(file);
     // Faites ce que vous voulez avec le fichier ici
     // ...
-    echo("echo")
+    //echo("echo")
   }
 </script>
     
 
 </body>
 <?php
+if(isset($_POST['submit'])){
+  if(!empty($_POST['my-awesome-dropzone'])){
+    $image=explode('.',$img);
 
+    $image_ext =end($image);
+    if(in_array(strtolower($image_ext),array('pdf'))==false){
+        echo 'Rentrez image aux extensions png,jpg,jpeg';
+    }else{
+        $image_size =getimagesize($img_t);
+        if($image_size['mime']=='image/png'){
 
+            $image_src = imagecreatefrompng($img_t);
+
+        }
+      }
+}}
 ?>

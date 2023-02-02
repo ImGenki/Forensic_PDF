@@ -1,3 +1,49 @@
+.dropzone {
+  display: inline-block;
+  width: 600px;
+  padding: 15px;
+  background-color: #2169ec21;
+  border: 3px #2169ec dashed;
+  border-radius: 5px;
+}
+.dz-default.dz-message {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.dropzone .dz-preview {
+  display: block;
+  padding: 0;
+  margin: 0 0 15px 0 !important;
+  width: 100% !important;
+  height: 100px;
+}
+.dz-image {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin-right: 10px;
+}
+.dz-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dropzone .dz-preview .dz-progress {
+  position: absolute;
+  bottom: 0;
+  left: 110px;
+  width: calc( 100% - 110px );
+}
+.dropzone .dz-preview .dz-error-mark,
+.dropzone .dz-preview .dz-success-mark {
+  position: absolute;
+  top: 5px !important;
+  left: auto !important;
+  right: 5px !important;
+}
+.dz-error-message{
+  visibility: hidden;
+}
 body{
     background-color: wheat;
     text-align: center;
@@ -11,7 +57,7 @@ h1{
 h2{
     display: inline;
     color: chartreuse;
-    font-family: Rubik;
+    font-family: Arial, Helvetica, sans-serif;
     font-size: 120;
 }
 #conteneur{
@@ -21,3 +67,4 @@ h2{
     width: 100.5%;
 
 }
+
