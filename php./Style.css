@@ -45,7 +45,7 @@
   visibility: hidden;
 }
 body{
-    background-color: wheat;
+    background-color: lightgray;
     text-align: center;
 }
 h1{
@@ -63,7 +63,7 @@ h2{
 #conteneur{
     background-color: white;
     text-align: center;
-    height: 70%;
+    height: 60%;
     width: 100.5%;
 
 }

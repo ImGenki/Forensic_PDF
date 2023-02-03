@@ -1,0 +1,24 @@
+PDFiD 0.2.8 ./PDFA/PDF_abberantv2.pdf
+ PDF Header: %PDF-1.3
+ obj                   25
+ endobj                25
+ stream                 4
+ endstream              4
+ xref                   2
+ trailer                2
+ startxref              2
+ /Page                  2
+ /Encrypt               0
+ /ObjStm                0
+ /JS                    1
+ /JavaScript            1
+ /AA                    1
+ /OpenAction            1
+ /AcroForm              0
+ /JBIG2Decode           0
+ /RichMedia             0
+ /Launch                1
+ /EmbeddedFile          0
+ /XFA                   0
+ /Colors > 2^24         0
+
