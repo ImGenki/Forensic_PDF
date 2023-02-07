@@ -10,11 +10,10 @@
     </div>
     <br>
     <br>
-  
 
     <form action="" method="post" class="dropzone" id="my-awesome-dropzone" enctype="multipart/form-data">
     <input type="file" name="pdf"/>
-    <input type="submit" name="submit" value="Analyser"/>
+    <input class="hminput" type="submit" name="submit" value="Analyser"/>
     </form>
     <br>
     
@@ -66,11 +65,23 @@
 
 if (isset($_POST['submit'])){
   if (isset($_FILES['pdf'])){
+  	if ($_FILES['pdf']['error']==0){
   	echo($_FILES['pdf']['name']);
+  	$tmp=$_FILES['pdf']['name'];
+  	$nam=explode('.',$tmp);
+  	$nam_ext =end($nam);
+  	 if(in_array(strtolower($nam_ext),array('pdf'))==false){
+            echo('Rentrez un document PDF');
+        }else{
+        echo('caca');
+        echo(' <br> <image src=load.gif width="250" />');
   	$muf=move_uploaded_file($_FILES['pdf']['tmp_name'],'./PDFA/'.basename($_FILES['pdf']['name']));
   	$c=shell_exec('python3 GenkiAnalyser.py ./PDFA/'.basename($_FILES['pdf']['name']));
   	header('Location: ./Download/index.php?action='.basename($_FILES['pdf']['name']));
-  }}/*
+  	}
+  }
+  }
+  }/*
   
   // Récupération du fichier PDF envoyé à partir du formulaire
   $file = $_POST['my-awesome-dropzone'];
