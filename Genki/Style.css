@@ -1,0 +1,130 @@
+.dropzone {
+  display: inline-block;
+  width: 600px;
+  padding: 15px;
+  background-color: #2169ec21;
+  border: 3px #2169ec dashed;
+  border-radius: 5px;
+}
+.dz-default.dz-message {
+  text-align: center;
+  margin-bottom: 15px;
+}
+.dropzone .dz-preview {
+  display: block;
+  padding: 0;
+  margin: 0 0 15px 0 !important;
+  width: 100% !important;
+  height: 100px;
+}
+.dz-image {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin-right: 10px;
+}
+.dz-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dropzone .dz-preview .dz-progress {
+  position: absolute;
+  bottom: 0;
+  left: 110px;
+  width: calc( 100% - 110px );
+}
+.dropzone .dz-preview .dz-error-mark,
+.dropzone .dz-preview .dz-success-mark {
+  position: absolute;
+  top: 5px !important;
+  left: auto !important;
+  right: 5px !important;
+}
+.dz-error-message{
+  visibility: hidden;
+}
+body{
+    background-color: lightgray;
+    text-align: center;
+}
+h1{
+    display: inline;
+    color: hotpink;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 120;
+}
+h2{
+    display: inline;
+    color: chartreuse;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 120;
+}
+#conteneur{
+    background-color: white;
+    text-align: center;
+    height: 60%;
+    width: 100.5%;
+
+}
+.hminput{
+background-color: rgb(13, 108, 255);
+border-radius: 8px;
+
+}
+
+button {
+  font-family: inherit;
+  font-size: 20px;
+  background: royalblue;
+  color: white;
+  padding: 0.7em 1em;
+  padding-left: 0.9em;
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.2s;
+  margin-left:45%;
+}
+
+button span {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
+}
+
+button svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+}
+
+button:hover .svg-wrapper {
+  animation: fly-1 0.6s ease-in-out infinite alternate;
+}
+
+button:hover svg {
+  transform: translateX(1.2em) rotate(45deg) scale(1.1);
+}
+
+button:hover span {
+  transform: translateX(5em);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+@keyframes fly-1 {
+  from {
+    transform: translateY(0.1em);
+  }
+
+  to {
+    transform: translateY(-0.1em);
+  }
+}
+
+

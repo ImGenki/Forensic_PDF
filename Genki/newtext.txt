@@ -1,0 +1,1 @@
+./PDFA/infected_pdf.pdf PDF file containing DOC file with VBA EICAR dropper. Created by Didier Stevens.
