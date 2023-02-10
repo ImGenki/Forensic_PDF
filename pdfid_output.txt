@@ -1,0 +1,24 @@
+PDFiD 0.2.8 ./PDFA/link.pdf
+ PDF Header: %PDF-1.6
+ obj                   15
+ endobj                15
+ stream                 3
+ endstream              3
+ xref                   1
+ trailer                1
+ startxref              1
+ /Page                  1
+ /Encrypt               0
+ /ObjStm                0
+ /JS                    0
+ /JavaScript            0
+ /AA                    0
+ /OpenAction            1
+ /AcroForm              0
+ /JBIG2Decode           0
+ /RichMedia             0
+ /Launch                0
+ /EmbeddedFile          0
+ /XFA                   0
+ /Colors > 2^24         0
+

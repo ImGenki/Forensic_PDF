@@ -12,45 +12,62 @@ import os
 pdf = FPDF()
 pdf.add_page()
 pdf.set_font("Arial", size=30)
-pdf.cell(200, 10, txt="Genki Analyser", ln=1, align="C")
+pdf.image("./Image/genki.png", 10, 0, w=50)
+pdf.set_text_color(255,105,180)
+pdf.cell(200, 10, txt="Genki", ln=1, align="C")
+pdf.set_text_color(128, 255, 0)
+pdf.cell(200, 10, txt="Analyser", ln=1, align="C")
+pdf.set_text_color(0,0,0)
+ntemp=sys.argv[1]
+ntemp=ntemp.replace("./PDFA/","")
 pdf.cell(200, 10, txt="", ln=1, align="L")
 pdf.set_font("Arial", size=20)
-pdf.cell(200, 10, txt=sys.argv[1], ln=1, align="C")
+pdf.cell(200, 10, txt=ntemp, ln=1, align="C")
 pdf.cell(200, 10, txt="", ln=1, align="L")
+
 def analyze_link():
-	pdf.set_font("Arial", size=20)
-	pdf.cell(100, 10, txt="ANALYSE DE LIENS MALVEILLANTS \n ", ln=1, align="L")
-	pdf.set_font("Arial", size=12)
-	pdf.cell(200, 10, txt="", ln=1, align="L")
-	KEY="AIzaSyA8GTzrZmSOON8xL4mgX68nIe0efFOQUBU"
-	# API Key pour utiliser Google Safe Browsing
-	API_KEY = "AIzaSyA8GTzrZmSOON8xL4mgX68nIe0efFOQUBU"
-	# Ouvrir le fichier PDF
-	pdf_file = open(sys.argv[1], "rb")
-	pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-
-	# Parcourir chaque page du PDF
-	for page_num in range(pdf_reader.numPages):
-    		page = pdf_reader.getPage(page_num)
-
-    		# Extraire les liens de la page
-    		links = page.get("/Annots", [])
-    		for link in links:
-        		link_obj = pdf_reader.getObject(link)
-        		if "/A" in link_obj:
-            			link_url = link_obj["/A"].get("/URI", None)
-            			if link_url:
-                			#Verifier si le lien est malveillant en utilisant Google Safe Browsing
-                			try:
-                	
-                				s = SafeBrowsing(KEY)
-                				r = s.lookup_urls([link_url])
-                				# Analyser la réponse de l'API
-                				if(r[link_url]['malicious']):
-                					print(r)
-                					pdf.cell(200, 10, txt=r, ln=1, align="L")
-                			except(Exception):
-                				print("une exeption a été levéé")
+	try:
+		pdf.set_font("Arial","U" ,size=20)
+		pdf.cell(100, 10, txt="ANALYSE DE LIENS MALVEILLANTS \n ", ln=1, align="L")
+		pdf.set_font("Arial", size=12)
+		pdf.cell(200, 10, txt="", ln=1, align="L")
+		KEY="AIzaSyA8GTzrZmSOON8xL4mgX68nIe0efFOQUBU"
+		# API Key pour utiliser Google Safe Browsing
+		API_KEY = "AIzaSyA8GTzrZmSOON8xL4mgX68nIe0efFOQUBU"
+		# Ouvrir le fichier PDF
+		pdf_file = open(sys.argv[1], "rb")
+		pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+		# Parcourir chaque page du PDF
+		for page_num in range(pdf_reader.numPages):
+    			page = pdf_reader.getPage(page_num)
+	
+    			# Extraire les liens de la page
+    			links = page.get("/Annots", [])
+    			for link in links:
+        			link_obj = pdf_reader.getObject(link)
+        			if "/A" in link_obj:
+        	    			link_url = link_obj["/A"].get("/URI", None)
+        	    			if link_url:
+        	        			#Verifier si le lien est malveillant en utilisant Google Safe Browsing
+        	        			try:
+        	        	
+        	        				s = SafeBrowsing(KEY)
+        	        				r = s.lookup_urls([link_url])
+        	        				# Analyser la réponse de l'API
+        	        				if(r[link_url]['malicious']):
+        	        					print(r)
+        	        					pdf.set_font("Arial","U",size=12)
+        	        					pdf.multi_cell(200, 10, txt=str(link_url), align="L")
+        	        					pdf.set_font("Arial",size=10)
+        	        					pdf.multi_cell(200, 10, txt="Malicieux:"+str(r[link_url]['malicious']), align="L")
+        	        					pdf.multi_cell(200, 10, txt="plateforme:"+str(r[link_url]['platforms']), align="L")
+        	        					pdf.multi_cell(200, 10, txt="type:"+str(r[link_url]['threats']), align="L")
+        	        					pdf.multi_cell(200, 10, txt="cache:"+str(r[link_url]['cache']), align="L")
+        	        					
+        	        			except(Exception):
+        	        				print("une exeption a été levéé")
+	except(Exception):
+		pdf.cell(200, 10, txt="Houston we got a problem", ln=1, align="L")
 	# Fermer le fichier PDF
 	pdf_file.close()
 	
@@ -65,7 +82,7 @@ def get_process_list():
     return process_list
 
 def process_comp():
-	pdf.set_font("Arial", size=20)
+	pdf.set_font("Arial",'U', size=20)
 	pdf.cell(200, 10, txt="", ln=1, align="L")
 	pdf.cell(200, 10, txt="ANALYSE DES PROCESSUS", ln=1, align="L")
 	pdf.set_font("Arial", size=10)
@@ -96,46 +113,46 @@ def process_comp():
 	pdf_file.close()
 	
 def check_for_javascript():
-    print("**************ANALYSE DU HEADERS**********************")
-    
-    pdf.set_font("Arial", size=20)
-    pdf.cell(200, 10, txt="", ln=1, align="L")
-    pdf.cell(10, 10, txt="ANALYSE DES HEADERS", ln=1, align="L")
-    pdf.set_font("Arial", size=10)
-    pdf.cell(200, 10, txt="", ln=1, align="L")
-    # Ouvrir le fichier PDF
-    pdf_file = open(sys.argv[1], "rb")
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-    result = subprocess.check_output(['pdfid',sys.argv[1]])
-   
-    result = subprocess.run(["pdfid", "test1.pdf"], capture_output=True, text=True)
-    output = result.stdout
-    # Écriture du résultat dans un fichier
-    with open("pdfid_output.txt", "w") as f:
-    	f.write(output)
-    pdf.multi_cell(100, 10, txt=output,align="L")
-    tem=str(result)
-   
-    print(tem)
-    #pdf.multi_cell(25, 10, txt=tem,align="L")
-
-    # Fermer le fichier PDF
-    pdf_file.close()
-
+    try:
+    	print("**************ANALYSE DU HEADERS**********************")
+    	
+    	pdf.set_font("Arial",'U',size=20)
+    	pdf.cell(200, 10, txt="", ln=1, align="L")
+    	pdf.cell(10, 10, txt="ANALYSE DES HEADERS", ln=1, align="L")
+    	
+    	pdf.set_font("Arial", size=10)
+    	pdf.cell(200, 10, txt="", ln=1, align="L")
+    	result = subprocess.run(["pdfid", sys.argv[1]], capture_output=True, text=True)
+    	output = result.stdout
+    	# Écriture du résultat dans un fichier
+    	with open("pdfid_output.txt", "w") as f:
+    		f.write(output)
+    	pdf.multi_cell(100, 10, txt=output,align="L")
+    	tem=str(result)
+   	
+    	print(tem)
+    	#pdf.multi_cell(25, 10, txt=tem,align="L")	
+    except(Exception):
+    	pdf.multi_cell(100, 10, txt="Une erreur est survenu pendant l'analyse des headers",align="L")
+    	
+# Fermer le fichier PDF
 def analyze_embedded_objects():
-    print("**************ANALYSE DES OBJETS EMBARQUEES**********************")
-    pdf.set_font("Arial", size=20)
-    pdf.cell(200, 10, txt="", ln=1, align="L")
-    pdf.cell(200, 10, txt="ANALYSE DES OBJETS EMBARQUEES", ln=1, align="L")
-    pdf.set_font("Arial", size=10)
-    pdf.cell(200, 10, txt="", ln=1, align="L")
-    # Ouvrir le fichier PDF
-    pdf_file = open(sys.argv[1], "rb")
-    pdf_reader = PyPDF2.PdfFileReader(pdf_file)
-    pdf.multi_cell(200, 10, txt=str(pdf_reader.resolvedObjects), align="L")
-    print(pdf_reader.resolvedObjects)
-    pdf_file.close()
-    
+	try:
+   	  print("**************ANALYSE DES OBJETS EMBARQUEES**********************")
+   	  pdf.set_font("Arial",'U',size=20)
+   	  pdf.cell(200, 10, txt="", ln=1, align="L")
+   	  pdf.cell(200, 10, txt="ANALYSE DES OBJETS EMBARQUEES", ln=1, align="L")
+   	  pdf.set_font("Arial", size=10)
+   	  pdf.cell(200, 10, txt="", ln=1, align="L")
+   	  # Ouvrir le fichier PDF
+   	  pdf_file = open(sys.argv[1], "rb")
+   	  pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+   	  pdf.multi_cell(200, 10, txt=str(pdf_reader.resolvedObjects), align="L")
+   	  print(pdf_reader.resolvedObjects)
+   	  pdf_file.close()
+	except(Exception):
+   	  pdf.cell(200, 10, txt="Une erreur est survenu pendant l'analyse", ln=1, align="L")
+ 		   
 
 def detect_vba():
 	pdf.set_font("Arial", size=20)
@@ -168,7 +185,57 @@ def detect_vba():
                 	pdf.cell(200, 10, txt="Aucune macro VBA n'a été détectée dans le fichier" , ln=1, align="L")
 
 	f.close()
-        
+def AnalyseVirusTotal():
+	try:
+		url = "https://www.virustotal.com/api/v3/files"
+		pdf.set_font("Arial",'U',size=20)	
+		pdf.cell(200, 10, txt="Analyse VIRUS TOTAL", ln=1, align="L")
+		pdf.set_font("Arial", size=10)
+		files = {"file": (sys.argv[1], open(sys.argv[1], "rb"), "application/pdf")}
+		headers = {
+    		"accept": "application/json",
+    		"x-apikey": "03b1f11837623cc37e7a1cf590df86bbcbbe5fb836fcb32a7aa2580acf2c244b"
+		}
+	
+		response = requests.post(url, files=files, headers=headers)
+		temp=response.json()
+		print(temp['data']['id'])
+	
+		url2 = "https://www.virustotal.com/api/v3/analyses/"+temp['data']['id']
+	
+		headers = {
+    		"accept": "application/json",
+   		 "x-apikey": "03b1f11837623cc37e7a1cf590df86bbcbbe5fb836fcb32a7aa2580acf2c244b"
+		}
+		c=0
+		response = requests.get(url2, headers=headers)
+		print(response.text)
+		while(c!=1):
+			if(response.json()['data']['attributes']['status']=='queued'):
+				time.sleep(30)
+				response = requests.get(url2, headers=headers)
+				print(response.text)
+			else:
+				c=1
+				pdf.set_font("Arial",'U',size=12)
+				pdf.cell(200, 10, txt="Stats", ln=1, align="L")
+				pdf.set_font("Arial",size=10)
+				pdf.cell(200, 10, txt="Inoffensif:"+str(response.json()['data']['attributes']['stats']['harmless']), ln=1, align="L")
+				pdf.cell(200, 10, txt="Type de fichier non supportés:"+str(response.json()['data']['attributes']['stats']['type-unsupported']), ln=1, align="L")
+				pdf.cell(200, 10, txt="Suspect:"+str(response.json()['data']['attributes']['stats']['suspicious']), ln=1, align="L")
+				pdf.cell(200, 10, txt="Timeout confirmé:"+str(response.json()['data']['attributes']['stats']['confirmed-timeout']), ln=1, align="L")
+				pdf.cell(200, 10, txt="Timeout:"+str(response.json()['data']['attributes']['stats']['timeout']), ln=1, align="L")
+				pdf.cell(200, 10, txt="Malicieux:"+str(response.json()['data']['attributes']['stats']['malicious']), ln=1, align="L")
+				pdf.cell(200, 10, txt="Non detecté:"+str(response.json()['data']['attributes']['stats']['undetected']), ln=1, align="L")
+				pdf.cell(200, 10, txt="echecs:"+str(response.json()['data']['attributes']['stats']['failure']), ln=1, align="L")				
+				pdf.set_font("Arial",'U',size=12)
+				pdf.cell(200, 10, txt="Détails", ln=1, align="L")
+				pdf.set_font("Arial",size=10)
+				pdf.multi_cell(200, 10, txt=str(response.text), align="L")
+				print(response.text)
+	except(Exception):
+		pdf.cell(200, 10, txt="Une erreur est survenu pendant l'analyse Virus Total", ln=1, align="L")
+	        
 if sys.argv[1]=='':
 	print ("entrer un nom de PDF pour l'analyser")
 else:
@@ -176,8 +243,11 @@ else:
 	analyze_link()
 	analyze_embedded_objects()
 	check_for_javascript()
-	detect_vba()
-	nomf="Rapport-"+sys.argv[1]
+	#detect_vba()
+	AnalyseVirusTotal()
+	nnomf=sys.argv[1]
+	nnomf=nnomf.replace("./PDFA/","")
+	nomf="./PDFR/Rapport-"+nnomf
 	pdf.output(nomf)
 
 
